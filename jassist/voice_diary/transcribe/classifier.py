@@ -24,7 +24,7 @@ def classify_text(client: OpenAI, transcription: Union[str, Dict[str, Any]]) -> 
         "Classify each context into one of these categories based on its content:\n"
         "- 'diary' for personal reflections, moods, or subjective experiences\n"
         "- 'calendar' for events with date/time\n"
-        "- 'to_do' for tasks or action items : be aware that if to comes up, there may be a calendar event associated with it\n"
+        "- 'to_do' for tasks or action items : be aware that if to do exists, there will be (with exceptions), a calendar event associated with it\n"
         "- 'accounts' for financial information like income or expenses\n"
         "- 'contacts' for names, phone numbers, or emails\n"
         "- 'entities' for organizations, companies, or web sites\n\n"
@@ -36,12 +36,12 @@ def classify_text(client: OpenAI, transcription: Union[str, Dict[str, Any]]) -> 
     )
 
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4.1-mini",
             messages=[
                 {"role": "system", "content": "You are a text context separator and classifier. You extract different contexts from user input and classify each one appropriately."},
                 {"role": "user", "content": prompt}
             ],
-            temperature=0.0
+            temperature=0.2
         )
 
         tag = response.choices[0].message.content.strip()
