@@ -1,0 +1,14 @@
+{
+    "paths": {
+        "json_output_directory": "output/calendar_events",
+        "credentials_directory": "credentials"
+    },
+    "google_calendar": {
+        "use_google_calendar": true,
+        "calendar_id": "primary"
+    },
+    "date_format": "%Y-%m-%d",
+    "timezone": "Europe/Lisbon",
+    "default_event_duration_minutes": 60,
+    "allow_summary_overwrite": true
+} 

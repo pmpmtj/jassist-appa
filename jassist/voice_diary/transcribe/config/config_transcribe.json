@@ -1,0 +1,30 @@
+{
+  "output_file": "diary_transcription.txt",
+  "paths": {
+    "output_dir": "../transcriptions"
+  },
+  "models": {
+    "whisper-1": {
+      "enabled": true,
+      "description": "Original Whisper model, good general-purpose speech to text",
+      "prompt": "Transcribe the given audio.",
+      "response_format": "json",
+      "supports_language_parameter": true
+    }
+  },
+  "default_model": "whisper-1",
+  "settings": {
+    "language": "en",
+    "prompt": "Transcribe the given audio.",
+    "response_format": "json"
+  },
+  "cost_management": {
+    "max_audio_duration_seconds": 300,
+    "warn_on_large_files": true
+  },
+  "transcription": {
+    "batch_processing": true,
+    "individual_files": true,
+    "batch_output_file": "batch_transcription.txt"
+  }
+}

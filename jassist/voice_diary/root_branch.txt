@@ -1,0 +1,52 @@
+jassist-assist/
+├── .git/
+├── jassist/
+│   └── voice_diary/
+│       ├── accounts/
+│       ├── calendar/
+│       ├── config/
+│       │   ├── download_config.json
+│       │   ├── .env
+│       │   ├── db_utils_config.json
+│       │   └── logger_config.json
+│       ├── credentials/
+│       ├── db_utils/
+│       │   ├── db_manager.py
+│       │   ├── setup_database.py
+│       │   ├── db_config.py
+│       │   └── __init__.py
+│       ├── diary/
+│       ├── download_audio_files/
+│       ├── downloaded/
+│       ├── logger_utils/
+│       ├── logs/
+│       ├── route_transcription/
+│       │   ├── db_interactions.py
+│       │   ├── route_transcription.py
+│       │   └── __init__.py
+│       ├── summary/
+│       ├── transcribe/
+│       ├── transcriptions/
+│       ├── tts_output/
+│       ├── utils/
+│       ├── voice_input/
+│       ├── __init__.py
+│       └── .gitkeep
+├── tests/
+│   ├── jassist/
+│   │   └── voice_diary/
+│   │       ├── download_audio_files/
+│   │       ├── logger_utils/
+│   │       ├── transcribe/
+│   │       └── __init__.py
+│   └── __init__.py
+├── .gitignore
+├── .pytest_cache/
+├── .venv/
+├── google_drive_download_flow.md
+├── jassist_gdrive_tutorial.md
+├── pyproject.toml
+├── pytest.ini
+├── README.md
+├── requirements.txt
+└── tmp/

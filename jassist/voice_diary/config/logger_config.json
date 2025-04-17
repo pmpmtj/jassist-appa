@@ -1,0 +1,93 @@
+{
+    "logging": {
+        "_description": "Centralized logging configuration for all Voice Diary modules",
+        "console": {
+            "_description": "Console (terminal) logging configuration",
+            "date_format": "%H:%M:%S",
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "level": "INFO"
+        },
+        "file": {
+            "_description": "File-based logging settings including rotation and formatting",
+            "backup_count": 5,
+            "date_format": "%Y-%m-%d %H:%M:%S",
+            "encoding": "utf-8",
+            "format": "%(asctime)s - %(name)s - %(levelname)s - [%(module)s:%(lineno)d] - %(message)s",
+            "level": "INFO",
+            "log_filename": "voice_diary.log",
+            "max_size_bytes": 1048576
+        },
+        "modules": {
+            "calendar_init": {
+                "level": "INFO",
+                "log_filename": "calendar_init.log"
+            },
+            "calendar": {
+                "level": "INFO",
+                "log_filename": "calendar.log"
+            },
+            "db_utils": {
+                "level": "INFO",
+                "log_filename": "db_utils.log"
+            },
+            "download_audio_files": {
+                "level": "INFO",
+                "log_filename": "download_audio_files.log"
+            },
+            "run": {
+                "level": "INFO",
+                "log_filename": "run.log"
+            },
+            "transcribe": {
+                "level": "INFO",
+                "log_filename": "transcribe.log"
+            },
+            "file_tools": {
+                "level": "INFO",
+                "log_filename": "utils"
+            },
+            "transcription_repository": {
+                "level": "INFO",
+                "log_filename": "db_utils.log"
+            },
+            "summary_repository": {
+                "level": "INFO",
+                "log_filename": "db_utils.log"
+            },
+            "calendar_repository": {
+                "level": "INFO",
+                "log_filename": "db_utils.log"
+            },
+            "setup_database": {
+                "level": "INFO",
+                "log_filename": "db_utils.log"
+            },
+            "db_manager": {
+                "level": "INFO",
+                "log_filename": "db_utils.log"
+            },
+            "db_config": {
+                "level": "INFO",
+                "log_filename": "db_utils.log"
+            },
+            "db_connection": {
+                "level": "INFO",
+                "log_filename": "db_utils.log"
+            },
+            "db_schema": {
+                "level": "INFO",
+                "log_filename": "db_utils.log"
+            },
+            "api_assistants_cliente_cli": {
+                "level": "INFO",
+                "log_filename": "api_assistants_cliente.log"
+            },
+            "keyword_parser_cli": {
+                "level": "INFO",
+                "log_filename": "keyword_parser.log"
+            }
+            
+        },
+        "validate_format": true
+    }
+}
