@@ -23,18 +23,50 @@ def create_tables(conn):
                     coalesce(NEW.tag, '') ||
                     coalesce(NEW.filename, '')
                 );
-            ELSE
+            ELSIF table_name = 'diary' THEN
                 NEW.search_vector := to_tsvector('english',
                     coalesce(NEW.content, '') ||
+                    coalesce(NEW.mood, '')
+                );
+            ELSIF table_name = 'to_do' THEN
+                NEW.search_vector := to_tsvector('english',
+                    coalesce(NEW.task, '') ||
+                    coalesce(NEW.priority, '') ||
+                    coalesce(NEW.status, '')
+                );
+            ELSIF table_name = 'calendar_events' THEN
+                NEW.search_vector := to_tsvector('english',
                     coalesce(NEW.summary, '') ||
                     coalesce(NEW.description, '') ||
-                    coalesce(NEW.note, '') ||
-                    coalesce(NEW.name, '') ||
-                    coalesce(NEW.context, '') ||
-                    coalesce(NEW.first_name, '') ||
-                    coalesce(NEW.last_name, '') ||
                     coalesce(NEW.location, '')
                 );
+            ELSIF table_name = 'contacts' THEN
+                NEW.search_vector := to_tsvector('english',
+                    coalesce(NEW.first_name, '') ||
+                    coalesce(NEW.last_name, '') ||
+                    coalesce(NEW.email, '') ||
+                    coalesce(NEW.phone, '') ||
+                    coalesce(NEW.note, '')
+                );
+            ELSIF table_name = 'entities' THEN
+                NEW.search_vector := to_tsvector('english',
+                    coalesce(NEW.name, '') ||
+                    coalesce(NEW.type, '') ||
+                    coalesce(NEW.context, '')
+                );
+            ELSIF table_name = 'vday_summaries' THEN
+                NEW.search_vector := to_tsvector('english',
+                    coalesce(NEW.content, '')
+                );
+            ELSIF table_name = 'accounts' THEN
+                NEW.search_vector := to_tsvector('english',
+                    coalesce(NEW.entry_type, '') ||
+                    coalesce(NEW.note, '') ||
+                    coalesce(NEW.currency, '')
+                );
+            ELSE
+                -- Fallback for any other tables
+                NEW.search_vector := to_tsvector('english', '');
             END IF;
             RETURN NEW;
         END

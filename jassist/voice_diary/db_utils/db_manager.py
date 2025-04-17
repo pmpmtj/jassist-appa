@@ -14,7 +14,8 @@ from jassist.voice_diary.db_utils.transcription_repository import (
     save_transcription,
     get_transcription,
     get_latest_transcriptions,
-    get_transcriptions_by_date_range
+    get_transcriptions_by_date_range,
+    mark_transcription_processed
 )
 from jassist.voice_diary.db_utils.summary_repository import (
     save_day_summary,
@@ -29,6 +30,15 @@ from jassist.voice_diary.db_utils.calendar_repository import (
     get_calendar_events_by_config_interval,
     update_calendar_event,
     delete_calendar_event
+)
+from jassist.voice_diary.db_utils.diary_repository import (
+    save_diary_entry,
+    get_diary_entry
+)
+from jassist.voice_diary.db_utils.todo_repository import (
+    save_todo_entry,
+    get_todo_entry,
+    update_todo_status
 )
 from jassist.voice_diary.logger_utils.logger_utils import setup_logger
 
@@ -46,6 +56,7 @@ __all__ = [
     'get_transcription',
     'get_latest_transcriptions',
     'get_transcriptions_by_date_range',
+    'mark_transcription_processed',
     
     # Summary operations
     'save_day_summary',
@@ -59,5 +70,14 @@ __all__ = [
     'get_upcoming_events',
     'get_calendar_events_by_config_interval',
     'update_calendar_event',
-    'delete_calendar_event'
+    'delete_calendar_event',
+    
+    # Diary operations
+    'save_diary_entry',
+    'get_diary_entry',
+    
+    # To-do operations
+    'save_todo_entry',
+    'get_todo_entry',
+    'update_todo_status'
 ]

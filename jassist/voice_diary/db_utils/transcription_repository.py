@@ -100,3 +100,43 @@ def get_transcriptions_by_date_range(conn, start_date, end_date):
     ORDER BY created_at DESC
     """, (start_date, end_date))
     return cur.fetchall()
+
+@db_connection_handler
+def mark_transcription_processed(conn, transcription_id, destination_table, destination_id):
+    """
+    Mark a transcription as processed and record where it was processed
+
+    Args:
+        transcription_id (int): ID of the transcription
+        destination_table (str): Name of the destination table (e.g., "diary", "to_do", "calendar_events")
+        destination_id (int): ID of the record in the destination table
+
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        cur = conn.cursor()
+
+        cur.execute("""
+        UPDATE transcriptions
+        SET is_processed = TRUE, 
+            destination_table = %s, 
+            destination_id = %s
+        WHERE id = %s
+        """, (destination_table, destination_id, transcription_id))
+
+        affected_rows = cur.rowcount
+        conn.commit()
+        
+        if affected_rows > 0:
+            logger.info(f"Transcription {transcription_id} marked as processed to {destination_table}/{destination_id}")
+            return True
+        else:
+            logger.warning(f"No transcription found with ID {transcription_id}")
+            return False
+            
+    except Exception as e:
+        conn.rollback()
+        logger.error(f"Failed to mark transcription {transcription_id} as processed.")
+        logger.error(str(e))
+        return False
