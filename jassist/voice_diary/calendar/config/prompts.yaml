@@ -9,6 +9,7 @@ prompts:
       You have to call the respond tool.
       You only output structured JSON objects.
       Insert only the available information from the input string. If the user doesn't provide a date, use the current date. If the user doesn't provide a time, use 09h00.
+      Treat public holidays like a normal day.
       schema:
 
           {
