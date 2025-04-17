@@ -40,6 +40,12 @@ from jassist.voice_diary.db_utils.todo_repository import (
     get_todo_entry,
     update_todo_status
 )
+from jassist.voice_diary.db_utils.accounts_repository import (
+    save_accounts_entry,
+    get_accounts_entry,
+    get_accounts_by_date_range,
+    get_total_by_type
+)
 from jassist.voice_diary.logger_utils.logger_utils import setup_logger
 
 logger = setup_logger("db_manager", module="db_utils")
@@ -79,5 +85,11 @@ __all__ = [
     # To-do operations
     'save_todo_entry',
     'get_todo_entry',
-    'update_todo_status'
+    'update_todo_status',
+    
+    # Accounts operations
+    'save_accounts_entry',
+    'get_accounts_entry',
+    'get_accounts_by_date_range',
+    'get_total_by_type'
 ]

@@ -305,6 +305,8 @@ def process_entry_by_tag(text: str, tag: str, db_id: Optional[int] = None) -> bo
         return insert_into_diary(text, db_id)
     elif tag_lower == "to_do" or tag_lower == "todo":
         return insert_into_todo(text, db_id)
+    elif tag_lower == "accounts" or tag_lower == "account":
+        return insert_into_accounts(text, db_id)
     else:
         # Other tags can be processed here as they are implemented
         logger.info(f"No specific processing implemented for tag: {tag}")
@@ -354,3 +356,18 @@ def insert_into_todo(text: str, db_id: Optional[int] = None) -> bool:
     """
     from jassist.voice_diary.todo import insert_into_todo as todo_insert
     return todo_insert(text, db_id)
+
+def insert_into_accounts(text: str, db_id: Optional[int] = None) -> bool:
+    """
+    Process a voice entry for accounts insertion.
+    Re-exports the function from the accounts module.
+    
+    Args:
+        text: The voice entry text
+        db_id: Optional database ID of the transcription
+        
+    Returns:
+        bool: True if processing was successful, False otherwise
+    """
+    from jassist.voice_diary.accounts import insert_into_accounts as accounts_insert
+    return accounts_insert(text, db_id)
