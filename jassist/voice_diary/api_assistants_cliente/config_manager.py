@@ -221,6 +221,36 @@ def load_assistant_config(
                      (f" with assistant '{assistant_name}'" if assistant_name else ""))
 
 
+def get_module_config(module_name: str, config_filename: str) -> Dict[str, Any]:
+    """
+    Load a specific configuration file from a module's config directory.
+    
+    Args:
+        module_name: Name of the module (e.g., 'contacts')
+        config_filename: Name of the config file (e.g., 'contacts_assistant_config.json')
+        
+    Returns:
+        Dict: Configuration dictionary
+        
+    Raises:
+        ConfigError: If the file doesn't exist or has parsing errors
+    """
+    try:
+        module_dir = get_module_dir(module_name)
+        config_path = module_dir / "config" / config_filename
+        
+        if not config_path.exists():
+            raise ConfigError(f"Config file not found: {config_path}")
+            
+        logger.info(f"Loading module config: {config_path}")
+        return load_json_config(config_path)
+        
+    except Exception as e:
+        error_msg = f"Error loading module config '{config_filename}' for module '{module_name}': {e}"
+        logger.error(error_msg)
+        raise ConfigError(error_msg)
+
+
 def load_prompt_templates(
     module_name: str,
     prompts_file: Optional[Union[str, Path]] = None

@@ -307,6 +307,10 @@ def process_entry_by_tag(text: str, tag: str, db_id: Optional[int] = None) -> bo
         return insert_into_todo(text, db_id)
     elif tag_lower == "accounts" or tag_lower == "account":
         return insert_into_accounts(text, db_id)
+    elif tag_lower == "contacts" or tag_lower == "contact":
+        return insert_into_contacts(text, db_id)
+    elif tag_lower == "entities" or tag_lower == "entity":
+        return insert_into_entities(text, db_id)
     else:
         # Other tags can be processed here as they are implemented
         logger.info(f"No specific processing implemented for tag: {tag}")
@@ -371,3 +375,33 @@ def insert_into_accounts(text: str, db_id: Optional[int] = None) -> bool:
     """
     from jassist.voice_diary.accounts import insert_into_accounts as accounts_insert
     return accounts_insert(text, db_id)
+
+def insert_into_contacts(text: str, db_id: Optional[int] = None) -> bool:
+    """
+    Process a voice entry for contacts insertion.
+    Re-exports the function from the contacts module.
+    
+    Args:
+        text: The voice entry text
+        db_id: Optional database ID of the transcription
+        
+    Returns:
+        bool: True if processing was successful, False otherwise
+    """
+    from jassist.voice_diary.contacts import insert_into_contacts as contacts_insert
+    return contacts_insert(text, db_id)
+
+def insert_into_entities(text: str, db_id: Optional[int] = None) -> bool:
+    """
+    Process a voice entry for entities insertion.
+    Re-exports the function from the entities module.
+    
+    Args:
+        text: The voice entry text
+        db_id: Optional database ID of the transcription
+        
+    Returns:
+        bool: True if processing was successful, False otherwise
+    """
+    from jassist.voice_diary.entities import insert_into_entities as entities_insert
+    return entities_insert(text, db_id)

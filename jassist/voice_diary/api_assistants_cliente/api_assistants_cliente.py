@@ -442,7 +442,7 @@ class OpenAIAssistantClient:
             input_text: The text to process
             prompt_template: Template string for the prompt
             template_vars: Variables to format the template with
-            assistant_instructions: Optional override for assistant instructions
+            assistant_instructions: Optional override for assistant instructions (DEPRECATED - use only at creation time)
             assistant_id: Optional assistant ID to use for processing
             thread_id: Optional thread ID to use for processing
             
@@ -465,9 +465,9 @@ class OpenAIAssistantClient:
             logger.error(error_msg)
             raise ConfigError(error_msg)
         
-        # Update instructions if provided
-        if assistant_instructions:
-            self.instructions = assistant_instructions
+        # NOTE: We no longer update instructions here - they should only be set at assistant creation time
+        # if assistant_instructions:
+        #     self.instructions = assistant_instructions
         
         # Run the assistant
         response = self.run_assistant(

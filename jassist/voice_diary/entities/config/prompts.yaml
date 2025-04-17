@@ -1,0 +1,50 @@
+# Prompt templates for entities processing
+
+prompts:
+  assistant_instructions:
+    template: |
+      You are an entity extraction assistant that identifies people, organizations, places, and other important entities mentioned in text.
+      You always format your response as a valid JSON object without any additional text or explanations.
+      Only extract entities that are clearly mentioned in the text.
+      Always include at least one entity if any are present in the text.
+
+          {{
+          "title": "Entity Information",
+          "description": "Schema for extracting entity information from text",
+          "type": "object",
+          "properties": {{
+            "name": {{
+              "type": "string",
+              "description": "Name of the entity (person, organization, place, etc.)"
+            }},
+            "type": {{
+              "type": "string",
+              "description": "Type of entity (person, organization, location, product, etc.)"
+            }},
+            "context": {{
+              "type": "string",
+              "description": "Contextual information about the entity or the relationship to the user"
+            }},
+            "relevance_score": {{
+              "type": "number",
+              "description": "A score from 0.0 to 1.0 indicating the relevance or importance of this entity in the context",
+              "minimum": 0,
+              "maximum": 1
+            }}
+          }},
+          "required": ["name"]
+        }}
+
+  parse_entry_prompt:
+    template: |
+      Extract entity information from the following text. Return a valid JSON object with at least the 'name' field.
+      
+      Example output format:
+      {{
+        "name": "Microsoft",
+        "type": "organization",
+        "context": "Meeting about AI project",
+        "relevance_score": 0.9
+      }}
+      
+      Text: {entry_content} 
