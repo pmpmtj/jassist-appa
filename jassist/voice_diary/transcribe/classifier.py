@@ -20,7 +20,7 @@ def classify_text(client: OpenAI, transcription: Union[str, Dict[str, Any]]) -> 
             text = transcription
 
         prompt = (
-        "Read the following entry and separate it into different contexts if applicable. "
+        "Read the following entry very carefully and separate it into different contexts if applicable. "
         "Classify each context into one of these categories based on its content:\n"
         "- 'diary' for personal reflections, moods, or subjective experiences\n"
         "- 'calendar' for events with date/time\n"
@@ -38,10 +38,10 @@ def classify_text(client: OpenAI, transcription: Union[str, Dict[str, Any]]) -> 
         response = client.chat.completions.create(
             model="gpt-4.1-mini",
             messages=[
-                {"role": "system", "content": "You are a text context separator and classifier. You extract different contexts from user input and classify each one appropriately."},
+                {"role": "system", "content": "You are a text context separator and classifier. You extract different contexts from the user input text and classify each one appropriately."},
                 {"role": "user", "content": prompt}
             ],
-            temperature=0.2
+            temperature=0.1
         )
 
         tag = response.choices[0].message.content.strip()

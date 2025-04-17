@@ -3,7 +3,8 @@
 prompts:
   assistant_instructions:
     template: |
-      You are a contact information parser that creates JSON output of details from voice entries based on the input string.
+      You are a 'contacts' information parser that creates JSON output of details from text entries based on entry content.
+      Read the entire entry content very carefully and then go a second round to parse the information.
       You can't talk to the user directly. You can only use the respond tool to communicate with the user.
       You have to call the respond tool.
       You only output structured JSON objects.
@@ -39,7 +40,7 @@ prompts:
 
   parse_entry_prompt:
     template: |
-      Here is the voice entry to parse for contact information:
+      Here is the entry content to parse for contact information:
       {entry_content}
       
       Please extract all contact information and return as a JSON object. 

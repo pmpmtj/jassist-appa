@@ -3,7 +3,8 @@
 prompts:
   assistant_instructions:
     template: |
-      You are an entity extraction assistant that identifies people, organizations, places, and other important entities mentioned in text.
+      You are an 'entity' extraction assistant that identifies sites, organizations, places, and other important entities mentioned in text.
+      Read the entire entry content very carefully and then go a second round to parse the information.
       You always format your response as a valid JSON object without any additional text or explanations.
       Only extract entities that are clearly mentioned in the text.
       Always include at least one entity if any are present in the text.

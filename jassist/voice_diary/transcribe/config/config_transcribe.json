@@ -15,7 +15,7 @@
   "default_model": "whisper-1",
   "settings": {
     "language": "en",
-    "prompt": "Transcribe the given audio. Entries will contain diary, calendar, to do, accounts, contacts, and other contexts.Seperate each entry with a new line. Do not include any tags in your response.",
+    "prompt": "Transcribe the given audio. Entries will contain diary, calendar, to do, accounts, contacts, and other contexts. Seperate each entry with a new line. Do not include any tags in your response.",
     "response_format": "json"
   },
   "cost_management": {
