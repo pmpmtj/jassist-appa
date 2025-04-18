@@ -2,6 +2,7 @@
 import datetime
 import traceback
 from pathlib import Path
+from typing import Union
 from jassist.voice_diary.logger_utils.logger_utils import setup_logger
 from jassist.voice_diary.download_audio_files.gdrive_auth import authenticate_google_drive
 from jassist.voice_diary.download_audio_files.gdrive_utils import (
@@ -11,6 +12,7 @@ from jassist.voice_diary.download_audio_files.gdrive_utils import (
     ensure_directory_exists,
     generate_filename_with_timestamp
 )
+from jassist.voice_diary.utils.path_utils import resolve_path
 
 logger = setup_logger("gdrive_downloader", module="download_audio_files")
 
@@ -62,9 +64,13 @@ def process_folder(service, folder_id, folder_name, config, dry_run=False):
         audio_extensions = config.get('audio_file_types', {}).get('include', [])
         audio_items = [item for item in all_items if any(item['name'].lower().endswith(ext) for ext in audio_extensions)]
 
-        # Downloads directory is hardcoded
+        # Downloads directory is hardcoded as per design decision
         downloads_dir = "downloaded"
-        base_download_dir = (Path(__file__).parent.parent / downloads_dir).resolve()
+        script_dir = Path(__file__).resolve().parent
+        voice_diary_dir = script_dir.parent
+        
+        # Use consistent path resolution
+        base_download_dir = resolve_path(downloads_dir, voice_diary_dir)
         ensure_directory_exists(base_download_dir, "download directory")
 
         for item in audio_items:

@@ -12,6 +12,7 @@ from typing import Dict, Any, List, Optional, Union
 from openai import OpenAI
 
 from jassist.voice_diary.logger_utils.logger_utils import setup_logger
+from jassist.voice_diary.utils.path_utils import resolve_path
 from .api_assistants_cliente import OpenAIAssistantClient
 from .config_manager import load_assistant_config
 from .exceptions import AssistantClientError, ConfigError
@@ -145,7 +146,7 @@ def process_with_assistant(
         if not prompts_file:
             # If prompts file not provided, use module's config path
             module_dir = Path(__file__).resolve().parent.parent.parent
-            prompts_file = module_dir / module_name / "config" / "prompts.yaml"
+            prompts_file = resolve_path(f"{module_name}/config/prompts.yaml", module_dir)
             
         prompt_template = get_prompt_template(
             module_name=module_name,

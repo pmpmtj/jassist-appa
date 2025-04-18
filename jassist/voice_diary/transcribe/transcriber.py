@@ -3,7 +3,7 @@ import json
 import time
 from pathlib import Path
 from typing import Any, Dict, Optional, Union
-from jassist.voice_diary.transcribe.file_processor import calculate_duration
+from jassist.voice_diary.transcribe.file_processor import calculate_duration, resolve_path
 from jassist.voice_diary.transcribe.model_handler import get_transcription_model
 from jassist.voice_diary.logger_utils.logger_utils import setup_logger
 
@@ -17,7 +17,9 @@ def transcribe_file(
     """
     Transcribe a single audio file using OpenAI and return the full response JSON.
     """
-    file_path = Path(file_path)
+    # Ensure file_path is a Path object
+    file_path = resolve_path(file_path)
+    
     if not client:
         logger.error("No OpenAI client provided.")
         return None

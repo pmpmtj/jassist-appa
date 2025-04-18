@@ -15,6 +15,7 @@ from typing import List, Optional
 from openai import OpenAI
 from .openai_assistant_manager import OpenAIAssistantManager, get_assistant_manager
 from jassist.voice_diary.logger_utils.logger_utils import setup_logger
+from jassist.voice_diary.utils.path_utils import resolve_path
 
 logger = setup_logger("reset_assistants_cli", module="utils")
 
@@ -27,7 +28,7 @@ def get_available_modules() -> List[str]:
     """
     # Find the voice_diary root directory
     script_dir = Path(__file__).resolve().parent.parent
-    config_dir = script_dir / "config" / "assistants"
+    config_dir = resolve_path("config/assistants", script_dir)
     
     # Make sure the directory exists
     if not config_dir.exists():
@@ -68,8 +69,8 @@ def reset_module_assistants(module_name: str, openai_api_key: Optional[str] = No
     
     # Find the config file
     script_dir = Path(__file__).resolve().parent.parent
-    config_dir = script_dir / "config" / "assistants"
-    config_file = config_dir / f"{module_name}_assistants.json"
+    config_dir = resolve_path("config/assistants", script_dir)
+    config_file = resolve_path(f"{module_name}_assistants.json", config_dir)
     
     if not config_file.exists():
         logger.error(f"No assistant config found for module '{module_name}'")

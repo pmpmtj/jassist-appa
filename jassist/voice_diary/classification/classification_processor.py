@@ -11,6 +11,7 @@ from typing import Dict, Any, Optional, Union
 from openai import OpenAI
 from jassist.voice_diary.api_assistants_cliente.api_assistants_cliente import OpenAIAssistantClient
 from jassist.voice_diary.logger_utils.logger_utils import setup_logger
+from jassist.voice_diary.utils.path_utils import resolve_path
 
 logger = setup_logger("classification_processor", module="classification")
 
@@ -35,10 +36,10 @@ class ClassificationProcessor:
         """
         # Get the config file path
         module_dir = Path(__file__).resolve().parent
-        config_file = module_dir / "config" / "classification_assistant_config.json"
+        config_file = resolve_path("config/classification_assistant_config.json", module_dir)
         
         # Load prompts file
-        prompts_file = module_dir / "config" / "prompts.yaml"
+        prompts_file = resolve_path("config/prompts.yaml", module_dir)
         instructions = self._load_instructions(prompts_file)
         
         # Create the client
@@ -98,7 +99,7 @@ class ClassificationProcessor:
             
             # Load parsing prompt from prompts file
             module_dir = Path(__file__).resolve().parent
-            prompts_file = module_dir / "config" / "prompts.yaml"
+            prompts_file = resolve_path("config/prompts.yaml", module_dir)
             
             try:
                 with open(prompts_file, "r", encoding="utf-8") as f:

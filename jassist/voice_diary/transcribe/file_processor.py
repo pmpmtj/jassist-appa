@@ -9,6 +9,36 @@ from jassist.voice_diary.logger_utils.logger_utils import setup_logger
 
 logger = setup_logger("file_processor", module="transcribe")
 
+def resolve_path(path_input: Union[str, Path], base_dir: Path = None) -> Path:
+    """
+    Consistently resolve a path string or Path object to an absolute Path.
+    
+    Args:
+        path_input: The path string or Path object to resolve
+        base_dir: Optional base directory to resolve relative paths from
+                  If None, relative paths will be resolved from current directory
+        
+    Returns:
+        An absolute Path object
+    """
+    # Convert to Path object if it's a string
+    path = Path(path_input) if isinstance(path_input, str) else path_input
+    
+    # If already absolute, return it directly
+    if path.is_absolute():
+        return path
+    
+    # If no base_dir provided, use current working directory
+    if base_dir is None:
+        return path.resolve()
+        
+    # If path contains parent directory references (..), handle specially
+    if isinstance(path_input, str) and "../" in path_input:
+        return (base_dir / path_input).resolve()
+    
+    # Otherwise, simply join with the base directory
+    return (base_dir / path).resolve()
+
 def get_audio_files(directory: Union[str, Path]) -> List[Path]:
     """
     Locate all audio files in a directory and sort them chronologically.
@@ -16,7 +46,9 @@ def get_audio_files(directory: Union[str, Path]) -> List[Path]:
     # Define common audio file extensions
     AUDIO_EXTENSIONS = {'.mp3', '.wav', '.m4a', '.flac', '.aac', '.ogg', '.wma', '.mp4', '.aiff', '.opus'}
     
-    directory = Path(directory)
+    # Ensure directory is a Path object
+    directory = resolve_path(directory)
+    
     if not directory.exists():
         logger.error(f"Audio directory does not exist: {directory}")
         return []
@@ -44,6 +76,9 @@ def calculate_duration(file_path: Union[str, Path]) -> float:
     """
     Calculate audio duration in seconds using ffprobe.
     """
+    # Ensure file_path is a Path object
+    file_path = resolve_path(file_path)
+    
     try:
         result = subprocess.run(
             [

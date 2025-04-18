@@ -1,13 +1,15 @@
 # config_loader.py
 import json
 from pathlib import Path
+from typing import Union, Dict, Any
 from jassist.voice_diary.download_audio_files.gdrive_utils import ensure_directory_exists
 from jassist.voice_diary.logger_utils.logger_utils import setup_logger, ENCODING
+from jassist.voice_diary.utils.path_utils import resolve_path
 
 logger = setup_logger("config_loader", module="download_audio_files")
 
-def load_config(config_path: Path, template_path: Path = None) -> dict:
-    def validate_config(config: dict) -> dict:
+def load_config(config_path: Path, template_path: Path = None) -> Dict[str, Any]:
+    def validate_config(config: Dict[str, Any]) -> Dict[str, Any]:
         required_keys = ["api", "auth", "folders", "audio_file_types", "download"]
         for key in required_keys:
             if key not in config:
@@ -15,6 +17,11 @@ def load_config(config_path: Path, template_path: Path = None) -> dict:
         
         return config
 
+    # Ensure paths are properly resolved
+    config_path = resolve_path(config_path)
+    if template_path:
+        template_path = resolve_path(template_path)
+    
     # Ensure the directory exists for all cases
     ensure_directory_exists(config_path.parent, description="config directory")
     

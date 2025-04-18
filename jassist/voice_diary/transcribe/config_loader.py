@@ -2,7 +2,7 @@ import os
 import json
 import logging
 from pathlib import Path
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Union
 from dotenv import load_dotenv
 from jassist.voice_diary.logger_utils.logger_utils import setup_logger
 
@@ -10,10 +10,40 @@ ENCODING = "utf-8"
 
 logger = setup_logger("config_loader", module="transcribe")
 
+def resolve_path(path_input: Union[str, Path], base_dir: Path = None) -> Path:
+    """
+    Consistently resolve a path string or Path object to an absolute Path.
+    
+    Args:
+        path_input: The path string or Path object to resolve
+        base_dir: Optional base directory to resolve relative paths from
+                  If None, relative paths will be resolved from current directory
+        
+    Returns:
+        An absolute Path object
+    """
+    # Convert to Path object if it's a string
+    path = Path(path_input) if isinstance(path_input, str) else path_input
+    
+    # If already absolute, return it directly
+    if path.is_absolute():
+        return path
+    
+    # If no base_dir provided, use current working directory
+    if base_dir is None:
+        return path.resolve()
+        
+    # If path contains parent directory references (..), handle specially
+    if isinstance(path_input, str) and "../" in path_input:
+        return (base_dir / path_input).resolve()
+    
+    # Otherwise, simply join with the base directory
+    return (base_dir / path).resolve()
+
 # Define paths
-MODULE_DIR = Path(__file__).parent
-CONFIG_PATH = MODULE_DIR / "config" / "config_transcribe.json"
-ENV_PATH = MODULE_DIR.parents[1] / "voice_diary" / "config" / ".env"  # voice_diary/config/.env
+MODULE_DIR = Path(__file__).resolve().parent
+CONFIG_PATH = resolve_path("config/config_transcribe.json", MODULE_DIR)
+ENV_PATH = resolve_path("../config/.env", MODULE_DIR)  # voice_diary/config/.env
 
 def convert_string_booleans(config_dict: Dict[str, Any]) -> Dict[str, Any]:
     """Recursively convert 'true'/'false' strings into Python booleans."""
@@ -33,7 +63,7 @@ def create_sample_config(path: Path) -> Dict[str, Any]:
         "transcriptions_dir": "transcriptions",
         "output_file": "diary_transcription.txt",
         "paths": {
-            "output_dir": "transcriptions"
+            "output_dir": "../transcriptions"
         },
         "models": {
             "whisper-1": {
@@ -60,6 +90,7 @@ def create_sample_config(path: Path) -> Dict[str, Any]:
         }
     }
 
+    # Ensure parent directory exists
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", encoding=ENCODING) as f:
         json.dump(default_config, f, indent=4)

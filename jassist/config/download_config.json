@@ -1,0 +1,30 @@
+{
+    "api": {
+        "scopes": [
+            "https://www.googleapis.com/auth/drive"
+        ]
+    },
+    "audio_file_types": {
+        "include": [
+            ".mp3",
+            ".wav",
+            ".m4a"
+        ]
+    },
+    "auth": {
+        "credentials_file": "gdrive_credentials.json",
+        "credentials_path": "jassist/voice_diary/credentials",
+        "token_file": "gdrive_token.pickle"
+    },
+    "download": {
+        "add_timestamps": true,
+        "delete_after_download": false,
+        "dry_run": false,
+        "timestamp_format": "%Y%m%d_%H%M%S_%f"
+    },
+    "folders": {
+        "target_folders": [
+            "root"
+        ]
+    }
+}

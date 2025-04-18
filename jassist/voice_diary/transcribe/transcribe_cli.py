@@ -12,6 +12,7 @@ from jassist.voice_diary.route_transcription.route_transcription import route_tr
 from jassist.voice_diary.utils.file_tools import clean_directory
 from jassist.voice_diary.logger_utils.logger_utils import setup_logger
 from jassist.voice_diary.db_utils.db_manager import initialize_db, save_transcription
+from jassist.voice_diary.utils.path_utils import resolve_path
 
 logger = setup_logger("transcribe_cli", module="transcribe")
 
@@ -60,25 +61,9 @@ def main():
     # Get output directory from transcribe config's paths section
     output_dir_config = config.get("paths", {}).get("output_dir", "transcriptions")
     
-    # Create absolute paths - handle both relative and absolute paths in an OS-agnostic way
-    downloads_dir = Path(downloads_dir_config)
-    if not downloads_dir.is_absolute():
-        # If path is relative with "../" notation, resolve correctly
-        if "../" in downloads_dir_config:
-            # Use Path's resolve mechanism to correctly handle parent directory references
-            downloads_dir = (voice_diary_dir / downloads_dir_config).resolve()
-        else:
-            downloads_dir = voice_diary_dir / downloads_dir_config
-    
-    output_dir = Path(output_dir_config)
-    if not output_dir.is_absolute():
-        # If path contains "../", handle it relative to voice_diary_dir
-        if "../" in output_dir_config:
-            # Handle parent directory references correctly
-            output_dir = (voice_diary_dir / output_dir_config).resolve()
-        else:
-            # For simple relative paths without parent directory references
-            output_dir = voice_diary_dir / output_dir_config
+    # Create absolute paths using the consistent resolver function
+    downloads_dir = resolve_path(downloads_dir_config, voice_diary_dir)
+    output_dir = resolve_path(output_dir_config, voice_diary_dir)
     
     logger.info(f"Using downloads directory: {downloads_dir}")
     logger.info(f"Using output directory: {output_dir}")
