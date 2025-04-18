@@ -7,7 +7,8 @@ It provides a centralized interface to the database operations.
 
 from jassist.voice_diary.db_utils.db_connection import (
     initialize_db, 
-    close_all_connections
+    close_all_connections,
+    db_connection_handler
 )
 from jassist.voice_diary.db_utils.db_schema import create_tables
 from jassist.voice_diary.db_utils.transcription_repository import (
@@ -56,6 +57,7 @@ __all__ = [
     'initialize_db',
     'close_all_connections',
     'create_tables',
+    'db_connection_handler',
     
     # Transcription operations
     'save_transcription',

@@ -1,7 +1,5 @@
-import logging
 import datetime
 from pathlib import Path
-import json
 
 from jassist.voice_diary.transcribe.config_loader import load_config, load_environment
 from jassist.voice_diary.transcribe.model_handler import get_openai_client
@@ -11,7 +9,7 @@ from jassist.voice_diary.classification.classification_processor import classify
 from jassist.voice_diary.route_transcription.route_transcription import route_transcription
 from jassist.voice_diary.utils.file_tools import clean_directory
 from jassist.voice_diary.logger_utils.logger_utils import setup_logger
-from jassist.voice_diary.db_utils.db_manager import initialize_db, save_transcription
+from jassist.voice_diary.transcribe.db import initialize_transcription_db, save_raw_transcription
 from jassist.voice_diary.utils.path_utils import resolve_path
 
 logger = setup_logger("transcribe_cli", module="transcribe")
@@ -45,7 +43,7 @@ def main():
         return
 
     # Step 3: Initialize database
-    if not initialize_db():
+    if not initialize_transcription_db():
         logger.error("Database initialization failed.")
         return
 
@@ -103,24 +101,15 @@ def main():
             
             # STEP 1: SAVE RAW TRANSCRIPTION TO DATABASE IMMEDIATELY
             try:
-                metadata = {
-                    "model_used": config.get("default_model"),
-                    "transcribed_at": datetime.datetime.now().isoformat(),
-                    "raw": True  # Mark this as a raw transcription
-                }
-                
-                raw_db_id = save_transcription(
+                raw_db_id = save_raw_transcription(
                     content=transcription_text,
                     filename=file_path.name,
                     audio_path=str(file_path),
                     duration_seconds=duration,
-                    metadata=metadata,
-                    tag="raw_transcription"  # Special tag for raw transcriptions
+                    model_used=config.get("default_model")
                 )
                 
-                if raw_db_id:
-                    logger.info(f"Raw transcription saved to database with ID: {raw_db_id}")
-                else:
+                if not raw_db_id:
                     logger.error("Failed to save raw transcription to database.")
             except Exception as e:
                 logger.error(f"Error saving raw transcription to database: {e}")
