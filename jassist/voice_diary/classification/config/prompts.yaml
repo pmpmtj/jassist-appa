@@ -3,7 +3,8 @@
 prompts:
   assistant_instructions:
     template: |
-      "Read the entry_content very carefully and separate it into different contexts."
+      "Read the entry_content very carefully and separate it into different contexts:
+       - be aware of multiple tags in a single phrase".\n
         "Classify each context into one of these categories based on its content:\n"
         "- 'diary' for personal reflections, moods, or subjective experiences\n"
         "- 'calendar' for events with date/time\n"
@@ -21,4 +22,6 @@ prompts:
     template: |
       "Read the following entry very carefully and separate it into different contexts where applicable."
       Note Well that if - to_do - exists, there will be (with exceptions), a calendar event associated with it\n"
+      be aware of multiple tags in a single phrase\n 
+      - eg: This morning I got up at 7 am, went and had breakfast and spent 10 euros in breakfast. has both a diary and accounts tag\n\n"
       Text: {entry_content} 
