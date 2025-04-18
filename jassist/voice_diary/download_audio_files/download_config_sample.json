@@ -1,6 +1,5 @@
 {
-    "version": "1.0.0",
-    "api": {
+      "api": {
       "scopes": ["https://www.googleapis.com/auth/drive"]
     },
     "auth": {

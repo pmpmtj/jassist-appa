@@ -8,7 +8,7 @@ logger = setup_logger("config_loader", module="download_audio_files")
 
 def load_config(config_path: Path, template_path: Path = None) -> dict:
     def validate_config(config: dict) -> dict:
-        required_keys = ["version", "api", "auth", "folders", "audio_file_types", "download"]
+        required_keys = ["api", "auth", "folders", "audio_file_types", "download"]
         for key in required_keys:
             if key not in config:
                 raise ValueError(f"Missing required config key: {key}")

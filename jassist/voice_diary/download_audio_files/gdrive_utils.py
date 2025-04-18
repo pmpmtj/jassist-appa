@@ -32,17 +32,6 @@ def find_folder_by_name(service, folder_name):
         logger.debug(traceback.format_exc())
     return None
 
-def list_files_in_folder(service, folder_id):
-    try:
-        query = f"'{folder_id}' in parents and trashed = false"
-        results = service.files().list(q=query, spaces='drive', fields='files(id, name, mimeType)').execute()
-        files = results.get('files', [])
-        return [f for f in files if f['mimeType'] != 'application/vnd.google-apps.folder']
-    except Exception as e:
-        logger.error(f"Error listing files in folder '{folder_id}': {e}")
-        logger.debug(traceback.format_exc())
-        return []
-
 def download_file(service, file_id, file_path):
     try:
         request = service.files().get_media(fileId=file_id)

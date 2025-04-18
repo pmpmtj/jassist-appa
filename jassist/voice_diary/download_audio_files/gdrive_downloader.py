@@ -6,7 +6,6 @@ from jassist.voice_diary.logger_utils.logger_utils import setup_logger
 from jassist.voice_diary.download_audio_files.gdrive_auth import authenticate_google_drive
 from jassist.voice_diary.download_audio_files.gdrive_utils import (
     find_folder_by_name,
-    list_files_in_folder,
     download_file,
     delete_file,
     ensure_directory_exists,
