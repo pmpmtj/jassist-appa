@@ -15,6 +15,9 @@ def load_config(config_path: Path, template_path: Path = None) -> dict:
         
         return config
 
+    # Ensure the directory exists for all cases
+    ensure_directory_exists(config_path.parent, description="config directory")
+    
     if config_path.exists():
         with open(config_path, "r", encoding=ENCODING) as f:
             config = json.load(f)
@@ -22,8 +25,7 @@ def load_config(config_path: Path, template_path: Path = None) -> dict:
     elif template_path and template_path.exists():
         with open(template_path, "r", encoding=ENCODING) as src:
             data = json.load(src)
-        # Ensure the directory exists before creating the config file
-        ensure_directory_exists(config_path.parent, description="config directory")
+        # Create the config file
         with open(config_path, "w", encoding=ENCODING) as dst:
             json.dump(data, dst, indent=4, sort_keys=True)
         logger.info(f"Created config from template at: {config_path}")

@@ -1,0 +1,2 @@
+python -m pytest jassist/voice_diary/download_audio_files -v
+
