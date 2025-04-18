@@ -1,0 +1,24 @@
+# Prompt templates for classification processing
+
+prompts:
+  assistant_instructions:
+    template: |
+      "Read the entry_content very carefully and separate it into different contexts."
+        "Classify each context into one of these categories based on its content:\n"
+        "- 'diary' for personal reflections, moods, or subjective experiences\n"
+        "- 'calendar' for events with date/time\n"
+        "- 'to_do' for tasks or action items : Note Well that if - to_do - exists, there will be (with exceptions), a calendar event associated with it\n"
+        "- 'accounts' for financial information like income or expenses\n"
+        "- 'contacts' for names, phone numbers, or emails\n"
+        "- 'entities' for organizations, companies, or web sites\n\n"
+        "For each context, respond in this exact format:\n"
+        'text: \"the extracted text content\"\n'
+        "tag: the appropriate category (one of: diary, calendar, to_do, accounts, contacts, entities)\n\n"
+        "If there are multiple contexts, separate them with a blank line.\n\n"
+      Never include any additional explanations or commentary in your response.
+
+  parse_entry_prompt:
+    template: |
+      "Read the following entry very carefully and separate it into different contexts where applicable."
+      Note Well that if - to_do - exists, there will be (with exceptions), a calendar event associated with it\n"
+      Text: {entry_content} 

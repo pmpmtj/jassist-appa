@@ -7,7 +7,7 @@ from jassist.voice_diary.transcribe.config_loader import load_config, load_envir
 from jassist.voice_diary.transcribe.model_handler import get_openai_client
 from jassist.voice_diary.transcribe.file_processor import get_audio_files, calculate_duration
 from jassist.voice_diary.transcribe.transcriber import transcribe_file
-from jassist.voice_diary.transcribe.classifier import classify_text
+from jassist.voice_diary.classification.classification_processor import classify_text
 from jassist.voice_diary.route_transcription.route_transcription import route_transcription
 from jassist.voice_diary.utils.file_tools import clean_directory
 from jassist.voice_diary.logger_utils.logger_utils import setup_logger
@@ -146,7 +146,7 @@ def main():
             
             # Now continue with classification and routing
             try:
-                tag = classify_text(client, transcription)
+                tag = classify_text(transcription)
                 logger.info(f"Classification result: {tag}")
             except Exception as e:
                 logger.error(f"Classification failed: {e}")
