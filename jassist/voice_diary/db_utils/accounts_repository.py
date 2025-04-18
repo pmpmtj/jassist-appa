@@ -10,7 +10,7 @@ from typing import Optional, Dict, List, Any
 logger = setup_logger("accounts_repository", module="db_utils")
 
 @db_connection_handler
-def save_accounts_entry(conn, entry_type, amount, currency="EUR", note=None, date=None, source_transcription_id=None):
+def save_accounts_entry(conn, entry_type, amount, currency="EUR", note=None, date=None, source_transcription_id=None, created_at=None):
     """
     Save an accounts entry to the database
     
@@ -21,6 +21,7 @@ def save_accounts_entry(conn, entry_type, amount, currency="EUR", note=None, dat
         note (str, optional): Note/description
         date (str, optional): Date in ISO format
         source_transcription_id (int, optional): ID of source transcription
+        created_at (datetime, optional): Custom timestamp for when the entry was created
         
     Returns:
         int: ID of the inserted record or None if error
@@ -35,13 +36,44 @@ def save_accounts_entry(conn, entry_type, amount, currency="EUR", note=None, dat
         except ValueError:
             logger.warning(f"Invalid date format: {date}, using current timestamp")
     
-    # Insert accounts entry
-    cur.execute("""
+    # Build columns and values lists based on which parameters are provided
+    columns = ["entry_type", "amount", "currency"]
+    values = [entry_type, amount, currency]
+    
+    # Add optional parameters that are not None
+    if note is not None:
+        columns.append("note")
+        values.append(note)
+    
+    if date_obj is not None:
+        columns.append("date")
+        values.append(date_obj)
+    elif date is None:
+        # If date is None, we need to explicitly add it and set to CURRENT_TIMESTAMP
+        columns.append("date")
+        values.append(datetime.now())
+    
+    if source_transcription_id is not None:
+        columns.append("source_transcription_id")
+        values.append(source_transcription_id)
+    
+    if created_at is not None:
+        columns.append("created_at")
+        values.append(created_at)
+    
+    # Build the SQL query dynamically
+    placeholders = ", ".join(["%s"] * len(values))
+    column_str = ", ".join(columns)
+    
+    query = f"""
     INSERT INTO accounts 
-    (entry_type, amount, currency, note, date, source_transcription_id)
-    VALUES (%s, %s, %s, %s, %s, %s)
+    ({column_str})
+    VALUES ({placeholders})
     RETURNING id
-    """, (entry_type, amount, currency, note, date_obj, source_transcription_id))
+    """
+    
+    # Execute the query
+    cur.execute(query, values)
     
     entry_id = cur.fetchone()[0]
     
@@ -63,7 +95,7 @@ def get_accounts_entry(conn, entry_id):
     cur = conn.cursor()
     
     cur.execute("""
-    SELECT id, entry_type, amount, currency, note, date, source_transcription_id
+    SELECT id, entry_type, amount, currency, note, date, source_transcription_id, created_at
     FROM accounts
     WHERE id = %s
     """, (entry_id,))
@@ -78,7 +110,8 @@ def get_accounts_entry(conn, entry_id):
             "currency": result[3],
             "note": result[4],
             "date": result[5],
-            "source_transcription_id": result[6]
+            "source_transcription_id": result[6],
+            "created_at": result[7]
         }
     return None
 
@@ -97,7 +130,7 @@ def get_accounts_by_date_range(conn, start_date, end_date):
     cur = conn.cursor()
     
     cur.execute("""
-    SELECT id, entry_type, amount, currency, note, date, source_transcription_id
+    SELECT id, entry_type, amount, currency, note, date, source_transcription_id, created_at
     FROM accounts
     WHERE date BETWEEN %s AND %s
     ORDER BY date DESC
@@ -114,7 +147,8 @@ def get_accounts_by_date_range(conn, start_date, end_date):
             "currency": result[3],
             "note": result[4],
             "date": result[5],
-            "source_transcription_id": result[6]
+            "source_transcription_id": result[6],
+            "created_at": result[7]
         })
     
     return entries

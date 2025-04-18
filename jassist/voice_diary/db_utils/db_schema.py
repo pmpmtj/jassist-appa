@@ -313,6 +313,7 @@ def create_tables(conn):
             currency TEXT DEFAULT 'EUR',
             note TEXT,
             date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+            created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
             search_vector tsvector,
             source_transcription_id INTEGER REFERENCES transcriptions(id) ON DELETE SET NULL
         )

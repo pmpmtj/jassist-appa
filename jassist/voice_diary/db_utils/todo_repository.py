@@ -27,13 +27,23 @@ def save_todo_entry(conn, task, due_date=None, priority=None, status="pending", 
     """
     cur = conn.cursor()
     
-    # Insert to-do entry
-    cur.execute("""
-    INSERT INTO to_do 
-    (task, due_date, priority, status, source_transcription_id, created_at)
-    VALUES (%s, %s, %s, %s, %s, %s)
-    RETURNING id
-    """, (task, due_date, priority, status, source_transcription_id, created_at))
+    # Insert to-do entry - handle created_at properly
+    if created_at is None:
+        # If created_at is None, don't include it in the SQL to let PostgreSQL use DEFAULT
+        cur.execute("""
+        INSERT INTO to_do 
+        (task, due_date, priority, status, source_transcription_id)
+        VALUES (%s, %s, %s, %s, %s)
+        RETURNING id
+        """, (task, due_date, priority, status, source_transcription_id))
+    else:
+        # If created_at is provided, include it in the SQL
+        cur.execute("""
+        INSERT INTO to_do 
+        (task, due_date, priority, status, source_transcription_id, created_at)
+        VALUES (%s, %s, %s, %s, %s, %s)
+        RETURNING id
+        """, (task, due_date, priority, status, source_transcription_id, created_at))
     
     entry_id = cur.fetchone()[0]
     
@@ -55,7 +65,7 @@ def get_todo_entry(conn, entry_id):
     cur = conn.cursor()
     
     cur.execute("""
-    SELECT id, task, due_date, priority, status, source_transcription_id
+    SELECT id, task, due_date, priority, status, source_transcription_id, created_at
     FROM to_do
     WHERE id = %s
     """, (entry_id,))
@@ -69,7 +79,8 @@ def get_todo_entry(conn, entry_id):
             "due_date": result[2],
             "priority": result[3],
             "status": result[4],
-            "source_transcription_id": result[5]
+            "source_transcription_id": result[5],
+            "created_at": result[6]
         }
     return None
 

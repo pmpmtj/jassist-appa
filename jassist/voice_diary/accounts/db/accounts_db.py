@@ -5,6 +5,7 @@ This module handles database operations specific to accounts entries.
 """
 
 from typing import Optional
+from datetime import datetime
 from jassist.voice_diary.logger_utils.logger_utils import setup_logger
 
 logger = setup_logger("accounts_db", module="accounts")
@@ -15,7 +16,8 @@ def save_accounts_entry(
     currency: str = "EUR",
     note: Optional[str] = None,
     date: Optional[str] = None,
-    source_transcription_id: Optional[int] = None
+    source_transcription_id: Optional[int] = None,
+    created_at: Optional[datetime] = None
 ) -> Optional[int]:
     """
     Save an accounts entry to the database.
@@ -27,6 +29,7 @@ def save_accounts_entry(
         note: Optional note/description
         date: Optional date in ISO format
         source_transcription_id: Optional ID of source transcription
+        created_at: Optional timestamp for when the entry was created
         
     Returns:
         int: ID of the saved entry, or None if save failed
@@ -42,7 +45,8 @@ def save_accounts_entry(
             currency=currency,
             note=note,
             date=date,
-            source_transcription_id=source_transcription_id
+            source_transcription_id=source_transcription_id,
+            created_at=created_at
         )
         
         if entry_id:

@@ -39,15 +39,29 @@ def save_contact(
     """
     try:
         cursor = conn.cursor()
-        cursor.execute(
-            """
-            INSERT INTO contacts 
-            (first_name, last_name, phone, email, note, source_transcription_id, created_at)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
-            RETURNING id
-            """,
-            (first_name, last_name, phone, email, note, source_transcription_id, created_at)
-        )
+        
+        # Handle created_at parameter - don't include it if None
+        if created_at is None:
+            cursor.execute(
+                """
+                INSERT INTO contacts 
+                (first_name, last_name, phone, email, note, source_transcription_id)
+                VALUES (%s, %s, %s, %s, %s, %s)
+                RETURNING id
+                """,
+                (first_name, last_name, phone, email, note, source_transcription_id)
+            )
+        else:
+            cursor.execute(
+                """
+                INSERT INTO contacts 
+                (first_name, last_name, phone, email, note, source_transcription_id, created_at)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+                RETURNING id
+                """,
+                (first_name, last_name, phone, email, note, source_transcription_id, created_at)
+            )
+            
         contact_id = cursor.fetchone()[0]
         conn.commit()
         
