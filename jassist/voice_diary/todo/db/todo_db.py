@@ -5,6 +5,7 @@ This module handles database operations specific to to-do entries.
 """
 
 from typing import Optional
+from datetime import datetime
 from jassist.voice_diary.logger_utils.logger_utils import setup_logger
 
 logger = setup_logger("todo_db", module="todo")
@@ -14,7 +15,8 @@ def save_todo_entry(
     due_date: Optional[str] = None,
     priority: Optional[str] = None,
     status: str = "pending",
-    source_transcription_id: Optional[int] = None
+    source_transcription_id: Optional[int] = None,
+    created_at: Optional[datetime] = None
 ) -> Optional[int]:
     """
     Save a to-do entry to the database.
@@ -25,6 +27,7 @@ def save_todo_entry(
         priority: Optional priority level (high, medium, low)
         status: Status of the task (default: pending)
         source_transcription_id: Optional ID of source transcription
+        created_at: Optional timestamp for when the entry was created
         
     Returns:
         int: ID of the saved entry, or None if save failed
@@ -39,7 +42,8 @@ def save_todo_entry(
             due_date=due_date,
             priority=priority,
             status=status,
-            source_transcription_id=source_transcription_id
+            source_transcription_id=source_transcription_id,
+            created_at=created_at
         )
         
         if entry_id:

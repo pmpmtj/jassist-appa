@@ -3,6 +3,7 @@ Entities repository for database operations.
 """
 
 from typing import Optional, Dict, Any
+from datetime import datetime
 
 from jassist.voice_diary.db_utils.db_connection import db_connection_handler
 from jassist.voice_diary.logger_utils.logger_utils import setup_logger
@@ -16,7 +17,8 @@ def save_entity(
     type: str = "",
     context: str = "",
     relevance_score: float = 0.5,
-    source_transcription_id: Optional[int] = None
+    source_transcription_id: Optional[int] = None,
+    created_at: Optional[datetime] = None
 ) -> Optional[int]:
     """
     Save an entity to the database.
@@ -28,6 +30,7 @@ def save_entity(
         context: Contextual information about the entity
         relevance_score: Score indicating the relevance (0.0-1.0)
         source_transcription_id: ID of the source transcription
+        created_at: Optional timestamp for when the entity was created
         
     Returns:
         int: ID of the inserted entity or None if operation failed
@@ -37,11 +40,11 @@ def save_entity(
         cursor.execute(
             """
             INSERT INTO entities 
-            (name, type, context, relevance_score, source_transcription_id)
-            VALUES (%s, %s, %s, %s, %s)
+            (name, type, context, relevance_score, source_transcription_id, created_at)
+            VALUES (%s, %s, %s, %s, %s, %s)
             RETURNING id
             """,
-            (name, type, context, relevance_score, source_transcription_id)
+            (name, type, context, relevance_score, source_transcription_id, created_at)
         )
         entity_id = cursor.fetchone()[0]
         conn.commit()

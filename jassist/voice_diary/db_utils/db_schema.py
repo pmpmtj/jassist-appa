@@ -224,6 +224,7 @@ def create_tables(conn):
             due_date TIMESTAMP WITH TIME ZONE,
             priority TEXT,
             status TEXT DEFAULT 'pending',
+            created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
             search_vector tsvector,
             source_transcription_id INTEGER REFERENCES transcriptions(id) ON DELETE SET NULL
         )
@@ -255,6 +256,7 @@ def create_tables(conn):
             phone TEXT,
             email TEXT,
             note TEXT,
+            created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
             search_vector tsvector,
             source_transcription_id INTEGER REFERENCES transcriptions(id) ON DELETE SET NULL
         )
@@ -282,6 +284,7 @@ def create_tables(conn):
             type TEXT,
             context TEXT,
             relevance_score FLOAT,
+            created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
             search_vector tsvector,
             source_transcription_id INTEGER REFERENCES transcriptions(id) ON DELETE SET NULL
         )

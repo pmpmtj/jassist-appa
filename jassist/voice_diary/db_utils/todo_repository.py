@@ -5,11 +5,12 @@ Database repository for to-do entries.
 from jassist.voice_diary.db_utils.db_connection import db_connection_handler
 from jassist.voice_diary.logger_utils.logger_utils import setup_logger
 from typing import Optional
+from datetime import datetime
 
 logger = setup_logger("todo_repository", module="db_utils")
 
 @db_connection_handler
-def save_todo_entry(conn, task, due_date=None, priority=None, status="pending", source_transcription_id=None):
+def save_todo_entry(conn, task, due_date=None, priority=None, status="pending", source_transcription_id=None, created_at=None):
     """
     Save a to-do entry to the database
     
@@ -19,6 +20,7 @@ def save_todo_entry(conn, task, due_date=None, priority=None, status="pending", 
         priority (str, optional): Priority level (high, medium, low)
         status (str, optional): Task status (default: pending)
         source_transcription_id (int, optional): ID of source transcription
+        created_at (datetime, optional): Custom timestamp for when the entry was created
         
     Returns:
         int: ID of the inserted record or None if error
@@ -28,10 +30,10 @@ def save_todo_entry(conn, task, due_date=None, priority=None, status="pending", 
     # Insert to-do entry
     cur.execute("""
     INSERT INTO to_do 
-    (task, due_date, priority, status, source_transcription_id)
-    VALUES (%s, %s, %s, %s, %s)
+    (task, due_date, priority, status, source_transcription_id, created_at)
+    VALUES (%s, %s, %s, %s, %s, %s)
     RETURNING id
-    """, (task, due_date, priority, status, source_transcription_id))
+    """, (task, due_date, priority, status, source_transcription_id, created_at))
     
     entry_id = cur.fetchone()[0]
     

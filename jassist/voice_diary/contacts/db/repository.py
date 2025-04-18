@@ -3,6 +3,7 @@ Contacts repository for database operations.
 """
 
 from typing import Optional, Dict, Any
+from datetime import datetime
 
 from jassist.voice_diary.db_utils.db_connection import db_connection_handler
 from jassist.voice_diary.logger_utils.logger_utils import setup_logger
@@ -17,7 +18,8 @@ def save_contact(
     phone: str = "",
     email: str = "", 
     note: str = "",
-    source_transcription_id: Optional[int] = None
+    source_transcription_id: Optional[int] = None,
+    created_at: Optional[datetime] = None
 ) -> Optional[int]:
     """
     Save a contact to the database.
@@ -30,6 +32,7 @@ def save_contact(
         email: Email address
         note: Additional notes about the contact
         source_transcription_id: ID of the source transcription
+        created_at: Optional timestamp for when the contact was created
         
     Returns:
         int: ID of the inserted contact or None if operation failed
@@ -39,11 +42,11 @@ def save_contact(
         cursor.execute(
             """
             INSERT INTO contacts 
-            (first_name, last_name, phone, email, note, source_transcription_id)
-            VALUES (%s, %s, %s, %s, %s, %s)
+            (first_name, last_name, phone, email, note, source_transcription_id, created_at)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
             RETURNING id
             """,
-            (first_name, last_name, phone, email, note, source_transcription_id)
+            (first_name, last_name, phone, email, note, source_transcription_id, created_at)
         )
         contact_id = cursor.fetchone()[0]
         conn.commit()
