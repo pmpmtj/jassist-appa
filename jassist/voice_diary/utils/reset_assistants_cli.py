@@ -13,7 +13,7 @@ import glob
 from pathlib import Path
 from typing import List, Optional
 from openai import OpenAI
-from .openai_assistant_manager import OpenAIAssistantManager, get_assistant_manager
+from .openai_assistant_manager import OpenAIAssistantManager
 from jassist.voice_diary.logger_utils.logger_utils import setup_logger
 from jassist.voice_diary.utils.path_utils import resolve_path
 

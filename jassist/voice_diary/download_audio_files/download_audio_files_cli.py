@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import Union
 from jassist.voice_diary.download_audio_files.config_loader import load_config
 from jassist.voice_diary.download_audio_files.gdrive_downloader import run_download
 from jassist.voice_diary.logger_utils.logger_utils import setup_logger

@@ -1,7 +1,7 @@
 # config_loader.py
 import json
 from pathlib import Path
-from typing import Union, Dict, Any
+from typing import Dict, Any
 from jassist.voice_diary.download_audio_files.gdrive_utils import ensure_directory_exists
 from jassist.voice_diary.logger_utils.logger_utils import setup_logger, ENCODING
 from jassist.voice_diary.utils.path_utils import resolve_path

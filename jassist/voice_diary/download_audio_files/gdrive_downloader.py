@@ -2,7 +2,6 @@
 import datetime
 import traceback
 from pathlib import Path
-from typing import Union
 from jassist.voice_diary.logger_utils.logger_utils import setup_logger
 from jassist.voice_diary.download_audio_files.gdrive_auth import authenticate_google_drive
 from jassist.voice_diary.download_audio_files.gdrive_utils import (

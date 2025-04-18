@@ -3,9 +3,10 @@ import json
 import time
 from pathlib import Path
 from typing import Any, Dict, Optional, Union
-from jassist.voice_diary.transcribe.file_processor import calculate_duration, resolve_path
+from jassist.voice_diary.transcribe.file_processor import calculate_duration
 from jassist.voice_diary.transcribe.model_handler import get_transcription_model
 from jassist.voice_diary.logger_utils.logger_utils import setup_logger
+from jassist.voice_diary.utils.path_utils import resolve_path
 
 logger = setup_logger("transcriber", module="transcribe")
 
