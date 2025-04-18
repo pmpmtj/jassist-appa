@@ -12,6 +12,7 @@ from .db.calendar_db import save_calendar_event
 from .google_calendar import insert_event_into_google_calendar
 from .utils.config_manager import load_calendar_config
 from jassist.voice_diary.logger_utils.logger_utils import setup_logger
+from jassist.voice_diary.db_utils.db_manager import mark_transcription_processed
 
 logger = setup_logger("calendar_processor", module="calendar")
 
@@ -59,6 +60,23 @@ def process_calendar_entry(text: str, db_id: Optional[int] = None) -> Tuple[bool
         if not event_id:
             logger.error("Failed to save event to database")
             return False, event_data
+            
+        # Mark transcription as processed if we have a db_id
+        if db_id:
+            try:
+                logger.info(f"Marking transcription {db_id} as processed to calendar_events/{event_id}")
+                mark_result = mark_transcription_processed(
+                    transcription_id=db_id,
+                    destination_table="calendar_events",
+                    destination_id=event_id
+                )
+                if mark_result:
+                    logger.info(f"Successfully marked transcription {db_id} as processed")
+                else:
+                    logger.warning(f"Failed to mark transcription {db_id} as processed")
+            except Exception as e:
+                logger.error(f"Error marking transcription as processed: {e}")
+                # Continue with processing even if marking fails
         
         # Insert into Google Calendar
         link = insert_event_into_google_calendar(event_data)

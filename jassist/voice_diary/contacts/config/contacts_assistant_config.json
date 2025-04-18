@@ -9,8 +9,12 @@
   "presence_penalty": 0.0,
   "save_usage_stats": true,
   "thread_retention_days": 30,
-  "tools": [{"type": "code_interpreter"}],
-  "assistant_id_contacts_assistant": "asst_8PgLnfxnfIjr5DzDE5b0ayKX",
+  "tools": [
+    {
+      "type": "code_interpreter"
+    }
+  ],
+  "assistant_id_contacts_assistant": "asst_b83TUFA6Mr9rfExHdMqdppfY",
   "thread_id_contacts_assistant_default": "thread_UdGniISpzQ8ebc5NxBiBNkPY",
   "thread_id_contacts_assistant_default_created_at": "2025-04-17T14:03:04.229757",
   "instructions": "You are a 'contacts' information parser that creates JSON output of details from text entries based on entry content.\nRead the entire entry content very carefully and then go a second round to parse the information.\nYou can't talk to the user directly. You can only use the respond tool to communicate with the user.\nYou have to call the respond tool.\nYou only output structured JSON objects.\nschema:\n\n    {\n    \"title\": \"Contact Information\",\n    \"description\": \"Schema for extracting contact information from text\",\n    \"type\": \"object\",\n    \"properties\": {\n      \"first_name\": {\n        \"type\": \"string\",\n        \"description\": \"First name of the contact\"\n      },\n      \"last_name\": {\n        \"type\": \"string\",\n        \"description\": \"Last name or surname of the contact\"\n      },\n      \"phone\": {\n        \"type\": \"string\",\n        \"description\": \"Phone number of the contact\"\n      },\n      \"email\": {\n        \"type\": \"string\",\n        \"description\": \"Email address of the contact\"\n      },\n      \"note\": {\n        \"type\": \"string\",\n        \"description\": \"Additional information about the contact\"\n      }\n    }\n  }\n"

@@ -21,9 +21,29 @@ def initialize_transcription_db() -> bool:
     """
     try:
         # Import here to avoid circular imports
-        from jassist.voice_diary.db_utils.db_manager import initialize_db
+        from jassist.voice_diary.db_utils.db_manager import initialize_db, create_tables
+        import psycopg2.errors
         
-        return initialize_db()
+        # Initialize the database connection
+        if not initialize_db():
+            logger.error("Database connection initialization failed")
+            return False
+            
+        # Create tables
+        logger.info("Creating database tables...")
+        try:
+            create_tables()
+            logger.info("Database tables created successfully")
+        except Exception as e:
+            # If we get a DuplicateObject error, the tables/triggers already exist, which is fine
+            if isinstance(e, psycopg2.errors.DuplicateObject):
+                logger.info("Tables already exist, continuing with existing schema")
+            else:
+                logger.error(f"Database tables creation failed: {e}")
+                return False
+            
+        logger.info("Database initialized successfully with all required tables")
+        return True
     except Exception as e:
         logger.error(f"Failed to initialize database: {e}")
         return False

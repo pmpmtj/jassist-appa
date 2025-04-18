@@ -97,6 +97,13 @@ def create_tables(conn):
         cur.execute("""
         CREATE INDEX IF NOT EXISTS idx_transcriptions_search_vector ON transcriptions USING GIN(search_vector)
         """)
+        
+        # First drop the trigger if it exists to avoid duplicate trigger errors
+        cur.execute("""
+        DROP TRIGGER IF EXISTS trg_update_search_vector_transcriptions ON transcriptions;
+        """)
+        
+        # Then create the trigger
         cur.execute("""
         CREATE TRIGGER trg_update_search_vector_transcriptions
         BEFORE INSERT OR UPDATE ON transcriptions
@@ -121,6 +128,12 @@ def create_tables(conn):
         cur.execute("""
         CREATE INDEX IF NOT EXISTS idx_vday_summaries_search_vector ON vday_summaries USING GIN(search_vector)
         """)
+        
+        # Drop existing trigger before creating
+        cur.execute("""
+        DROP TRIGGER IF EXISTS trg_update_search_vector_vday ON vday_summaries;
+        """)
+        
         cur.execute("""
         CREATE TRIGGER trg_update_search_vector_vday
         BEFORE INSERT OR UPDATE ON vday_summaries
@@ -161,6 +174,12 @@ def create_tables(conn):
         cur.execute("""
         CREATE INDEX IF NOT EXISTS idx_calendar_events_search_vector ON calendar_events USING GIN(search_vector)
         """)
+        
+        # Drop existing trigger before creating
+        cur.execute("""
+        DROP TRIGGER IF EXISTS trg_update_search_vector_calendar ON calendar_events;
+        """)
+        
         cur.execute("""
         CREATE TRIGGER trg_update_search_vector_calendar
         BEFORE INSERT OR UPDATE ON calendar_events
@@ -185,6 +204,12 @@ def create_tables(conn):
         cur.execute("""
         CREATE INDEX IF NOT EXISTS idx_diary_search_vector ON diary USING GIN(search_vector)
         """)
+        
+        # Drop existing trigger before creating
+        cur.execute("""
+        DROP TRIGGER IF EXISTS trg_update_search_vector_diary ON diary;
+        """)
+        
         cur.execute("""
         CREATE TRIGGER trg_update_search_vector_diary
         BEFORE INSERT OR UPDATE ON diary
@@ -209,6 +234,12 @@ def create_tables(conn):
         cur.execute("""
         CREATE INDEX IF NOT EXISTS idx_to_do_search_vector ON to_do USING GIN(search_vector)
         """)
+        
+        # Drop existing trigger before creating
+        cur.execute("""
+        DROP TRIGGER IF EXISTS trg_update_search_vector_todo ON to_do;
+        """)
+        
         cur.execute("""
         CREATE TRIGGER trg_update_search_vector_todo
         BEFORE INSERT OR UPDATE ON to_do
@@ -231,6 +262,12 @@ def create_tables(conn):
         cur.execute("""
         CREATE INDEX IF NOT EXISTS idx_contacts_search_vector ON contacts USING GIN(search_vector)
         """)
+        
+        # Drop existing trigger before creating
+        cur.execute("""
+        DROP TRIGGER IF EXISTS trg_update_search_vector_contacts ON contacts;
+        """)
+        
         cur.execute("""
         CREATE TRIGGER trg_update_search_vector_contacts
         BEFORE INSERT OR UPDATE ON contacts
@@ -252,6 +289,12 @@ def create_tables(conn):
         cur.execute("""
         CREATE INDEX IF NOT EXISTS idx_entities_search_vector ON entities USING GIN(search_vector)
         """)
+        
+        # Drop existing trigger before creating
+        cur.execute("""
+        DROP TRIGGER IF EXISTS trg_update_search_vector_entities ON entities;
+        """)
+        
         cur.execute("""
         CREATE TRIGGER trg_update_search_vector_entities
         BEFORE INSERT OR UPDATE ON entities
@@ -277,6 +320,12 @@ def create_tables(conn):
         cur.execute("""
         CREATE INDEX IF NOT EXISTS idx_accounts_search_vector ON accounts USING GIN(search_vector)
         """)
+        
+        # Drop existing trigger before creating
+        cur.execute("""
+        DROP TRIGGER IF EXISTS trg_update_search_vector_accounts ON accounts;
+        """)
+        
         cur.execute("""
         CREATE TRIGGER trg_update_search_vector_accounts
         BEFORE INSERT OR UPDATE ON accounts
