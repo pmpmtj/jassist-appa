@@ -72,7 +72,13 @@ def main():
     
     output_dir = Path(output_dir_config)
     if not output_dir.is_absolute():
-        output_dir = script_dir / output_dir_config
+        # If path contains "../", handle it relative to voice_diary_dir
+        if "../" in output_dir_config:
+            # Handle parent directory references correctly
+            output_dir = (voice_diary_dir / output_dir_config).resolve()
+        else:
+            # For simple relative paths without parent directory references
+            output_dir = voice_diary_dir / output_dir_config
     
     logger.info(f"Using downloads directory: {downloads_dir}")
     logger.info(f"Using output directory: {output_dir}")
